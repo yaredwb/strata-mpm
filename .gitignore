@@ -1,0 +1,13 @@
+# Compiled reference binaries & temporary frames
+reference/mpm_ref
+*.o
+*.out
+*.exe
+*.ppm
+renders/frames/
+
+# OS / editor artifacts
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

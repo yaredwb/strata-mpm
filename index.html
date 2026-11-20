@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; object-src 'none'; base-uri 'none'; form-action 'none';">
+  <meta name="referrer" content="no-referrer">
+  <title>STRATA — Large-Deformation Elastoplastic MLS-MPM Geomechanics Laboratory</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Top Laboratory Bar -->
+    <header class="top-bar">
+      <div class="brand">
+        <div class="brand-badge" aria-hidden="true"></div>
+        <div class="brand-text">
+          <span class="brand-title">STRATA</span>
+          <span class="brand-sub">Finite-Strain Elastoplastic MLS-MPM Geomechanics Lab</span>
+        </div>
+      </div>
+
+      <nav class="scenario-strip" id="scenario-strip" aria-label="Geomechanics Benchmarks">
+        <button type="button" class="pill active" data-scenario="quickclay">Quick-Clay Landslide</button>
+        <button type="button" class="pill" data-scenario="liquefaction">Seismic Liquefaction</button>
+        <button type="button" class="pill" data-scenario="footing">Prandtl Footing</button>
+        <button type="button" class="pill" data-scenario="column">Column Collapse</button>
+        <button type="button" class="pill" data-scenario="retaining">Sheet-Pile Wall</button>
+        <button type="button" class="pill" data-scenario="biaxial">Biaxial Shear Band</button>
+      </nav>
+
+      <div class="top-actions">
+        <button type="button" class="action-btn warm" id="btn-excavate-preset">Excavate Slope Toe</button>
+        <button type="button" class="action-btn danger" id="btn-earthquake">Trigger Earthquake</button>
+        <button type="button" class="action-btn" id="btn-pause">Pause</button>
+        <button type="button" class="action-btn" id="btn-reset">Reset [R]</button>
+      </div>
+    </header>
+
+    <!-- Main 3-Column Engineering Workbench -->
+    <main class="workbench">
+      <!-- Left Column: Continuum Controls & Constitutive Model -->
+      <aside class="sidebar sidebar-left">
+        <div class="card">
+          <div class="card-title">Interactive Field Tools</div>
+          <div class="tool-grid" id="tool-strip">
+            <button type="button" class="tool-pill active" data-tool="probe">[1] Stress Probe</button>
+            <button type="button" class="tool-pill" data-tool="excavate">[2] Excavator</button>
+            <button type="button" class="tool-pill" data-tool="pour_sand">[3] Pour Sand</button>
+            <button type="button" class="tool-pill" data-tool="pour_clay">[4] Pour Quick Clay</button>
+            <button type="button" class="tool-pill span-2" data-tool="footing">[5] Drop Concrete Footing Block</button>
+          </div>
+          <label class="slider-row">
+            <div class="slider-meta"><span>Tool Brush Radius</span><span class="mono-accent" id="out-brush">1.9 m</span></div>
+            <input type="range" id="ctrl-brush" min="0.8" max="4.0" step="0.1" value="1.9">
+          </label>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Continuum Field Visualization</div>
+          <div class="field-grid" id="field-grid">
+            <button type="button" class="mode-btn active" data-field="0">Stratigraphy</button>
+            <button type="button" class="mode-btn" data-field="1">Plastic εp_q</button>
+            <button type="button" class="mode-btn" data-field="2">Shear q (kPa)</button>
+            <button type="button" class="mode-btn" data-field="3">Mean p' (kPa)</button>
+            <button type="button" class="mode-btn" data-field="4">Liquefaction r_u</button>
+            <button type="button" class="mode-btn" data-field="5">Softening s_u/s_u0</button>
+            <button type="button" class="mode-btn span-2" data-field="6">Velocity Magnitude |v|</button>
+          </div>
+          <div class="overlay-toggles">
+            <button type="button" class="mini-btn" id="btn-tensors">σ1/σ3 Crosses</button>
+            <button type="button" class="mini-btn" id="btn-vectors">Velocity</button>
+            <button type="button" class="mini-btn" id="btn-mesh">MPM Grid</button>
+          </div>
+        </div>
+
+        <div class="card scroll-card">
+          <div class="card-title">Constitutive Parameters</div>
+          <label class="slider-row">
+            <div class="slider-meta"><span>Quick-Clay Intact s<sub>u,0</sub></span><span class="mono-accent" id="out-su0">42 kPa</span></div>
+            <input type="range" id="ctrl-su0" min="15" max="60" step="1" value="42">
+          </label>
+          <label class="slider-row">
+            <div class="slider-meta"><span>Clay Sensitivity S<sub>t</sub></span><span class="mono-accent" id="out-sens">St = 40</span></div>
+            <input type="range" id="ctrl-sens" min="1" max="80" step="1" value="40">
+          </label>
+          <label class="slider-row">
+            <div class="slider-meta"><span>Friction Angle &phi;'</span><span class="mono-accent" id="out-phi">32&deg;</span></div>
+            <input type="range" id="ctrl-phi" min="5" max="45" step="1" value="32">
+          </label>
+          <label class="slider-row">
+            <div class="slider-meta"><span>Cohesion c'</span><span class="mono-accent" id="out-cohesion">20 kPa</span></div>
+            <input type="range" id="ctrl-cohesion" min="0" max="40" step="1" value="20">
+          </label>
+          <label class="slider-row">
+            <div class="slider-meta"><span>Young's Modulus E</span><span class="mono-accent" id="out-youngs">8.0 MPa</span></div>
+            <input type="range" id="ctrl-youngs" min="3.0" max="16.0" step="0.5" value="8.0">
+          </label>
+          <label class="slider-row">
+            <div class="slider-meta"><span>Seismic Base PGA</span><span class="mono-accent" id="out-pga">0.35 g</span></div>
+            <input type="range" id="ctrl-pga" min="0.10" max="0.75" step="0.05" value="0.35">
+          </label>
+        </div>
+      </aside>
+
+      <!-- Center Column: Live MLS-MPM Continuum Viewport -->
+      <section class="viewport-col">
+        <div class="hint-banner">
+          <span id="scenario-hint">Click "Excavate Slope Toe" or drag with the Excavator on the slope toe to trigger a retrogressive quick-clay failure cascade.</span>
+          <div class="export-btns">
+            <button type="button" class="mini-btn" id="btn-snap">PNG</button>
+            <button type="button" class="mini-btn" id="btn-csv">Export CSV</button>
+          </div>
+        </div>
+        <div class="canvas-stage">
+          <canvas id="sim-canvas" aria-label="Real-time finite-strain MLS-MPM geomechanics simulation viewport"></canvas>
+        </div>
+        <footer class="status-bar">
+          <div class="stat-group">
+            <span>t = <strong id="val-time">0.00 s</strong></span>
+            <span>MPs: <strong id="val-mps">0</strong></span>
+            <span>Δt: <strong id="val-dt">1.20 ms</strong></span>
+            <span id="val-fps">-- FPS</span>
+          </div>
+          <div class="stat-group">
+            <span>Max ε<sub>p</sub>: <strong id="val-maxeps">0.000</strong></span>
+            <span>Max r<sub>u</sub>: <strong id="val-maxru">0.00</strong></span>
+            <span>Remolded: <strong id="val-remold">0.0%</strong></span>
+          </div>
+        </footer>
+      </section>
+
+      <!-- Right Column: Live Mohr's Circle + Engineering Telemetry Charts -->
+      <aside class="sidebar sidebar-right">
+        <div class="card">
+          <div class="card-header-row">
+            <span class="card-title">Live Stress State &amp; Mohr Circle</span>
+            <span class="mat-badge" id="probe-mat">Hover Soil</span>
+          </div>
+          <canvas id="mohr-canvas" width="300" height="176" aria-label="Live Mohr circle and failure envelope"></canvas>
+          <div class="metric-grid">
+            <div class="metric-cell"><span class="mk">Major σ'<sub>1</sub></span><span class="mv" id="val-sig1">—</span></div>
+            <div class="metric-cell"><span class="mk">Minor σ'<sub>3</sub></span><span class="mv" id="val-sig3">—</span></div>
+            <div class="metric-cell"><span class="mk">Mean p'</span><span class="mv" id="val-peff">—</span></div>
+            <div class="metric-cell"><span class="mk">Shear q</span><span class="mv" id="val-qshear">—</span></div>
+            <div class="metric-cell"><span class="mk">Pore u (r<sub>u</sub>)</span><span class="mv" id="val-upore">—</span></div>
+            <div class="metric-cell"><span class="mk">Mob. φ' / s<sub>u</sub></span><span class="mv" id="val-mobphi">—</span></div>
+          </div>
+        </div>
+
+        <div class="card chart-card">
+          <div class="card-title">Real-Time Benchmark Telemetry</div>
+          <canvas id="chart-canvas" width="300" height="190" aria-label="Real-time geomechanical engineering strip chart"></canvas>
+          <p class="method-note">
+            Quadratic B-Spline MLS-MPM + APIC &middot; Exact 2&times;2 SVD Hencky Logarithmic Strain &middot; Non-Associated Mohr-Coulomb &amp; Strain-Softening Sensitive Tresca Return Mapping &middot; 2D Eulerian Darcy Consolidation.
+          </p>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <script defer src="js/constitutive.js"></script>
+  <script defer src="js/mpm-solver.js"></script>
+  <script defer src="js/canvas-renderer.js"></script>
+  <script defer src="js/mohr-hud.js"></script>
+  <script defer src="js/app.js"></script>
+</body>
+</html>
