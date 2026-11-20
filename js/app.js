@@ -25,6 +25,7 @@
     const hud = new EngineeringHud(mohrCanvas, chartCanvas);
 
     const uiState = {
+      theme: 'dark',
       paused: false,
       fieldId: 0,
       tool: 'probe', // 'probe' | 'excavate' | 'pour_sand' | 'pour_clay' | 'footing'
@@ -40,6 +41,12 @@
       probeWorldX: 14.0,
       probeWorldY: 7.5
     };
+
+    function applyTheme(nextTheme) {
+      uiState.theme = nextTheme === 'light' ? 'light' : 'dark';
+      document.documentElement.dataset.theme = uiState.theme;
+      $('btn-theme').textContent = uiState.theme === 'light' ? 'Dark Mode' : 'Light Mode';
+    }
 
     let activeProbe = null;
     let pointerDown = false;
@@ -134,6 +141,10 @@
     $('btn-reset').addEventListener('click', () => {
       solver.loadScenario(solver.scenarioId);
       syncScenarioUi(solver.scenarioId);
+    });
+
+    $('btn-theme').addEventListener('click', () => {
+      applyTheme(uiState.theme === 'dark' ? 'light' : 'dark');
     });
 
     $('btn-pause').addEventListener('click', () => {
@@ -277,6 +288,7 @@
       else if (e.key === '4') selectTool('pour_clay');
       else if (e.key === '5') selectTool('footing');
       else if (e.key === 'r' || e.key === 'R') $('btn-reset').click();
+      else if (e.key === 't' || e.key === 'T') $('btn-theme').click();
     });
 
     function updateTelemetry(metrics, probe) {
@@ -308,6 +320,7 @@
       }
     }
 
+    applyTheme('dark');
     syncScenarioUi('quickclay');
 
     let lastMs = performance.now();
@@ -326,8 +339,8 @@
 
       activeProbe = solver.probeAt(uiState.probeWorldX, uiState.probeWorldY);
       renderer.render(solver, uiState, activeProbe);
-      hud.drawMohrCircle(solver, activeProbe);
-      hud.drawStripChart(solver);
+      hud.drawMohrCircle(solver, activeProbe, uiState.theme);
+      hud.drawStripChart(solver, uiState.theme);
 
       const metrics = solver.computeMetrics();
       updateTelemetry(metrics, activeProbe);

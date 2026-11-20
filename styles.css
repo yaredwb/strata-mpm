@@ -3,15 +3,46 @@
   --bg: #060911;
   --panel: #0c1220;
   --card: #101829;
+  --stage-bg: #060911;
+  --canvas-bg: #070b14;
   --border: rgba(140, 175, 228, 0.16);
   --border-hi: rgba(56, 214, 255, 0.45);
+  --btn-bg: rgba(255, 255, 255, 0.04);
+  --btn-hover: rgba(255, 255, 255, 0.09);
+  --btn-active-bg: rgba(56, 214, 255, 0.16);
+  --btn-active-text: #ebfbff;
+  --cell-bg: rgba(255, 255, 255, 0.025);
   --text: #e6eefc;
+  --text-strong: #ffffff;
+  --text-label: #c8d7ef;
   --dim: #8da0be;
   --accent: #38d6ff;
   --warm: #ff9c3b;
   --danger: #ff546c;
   --mono: ui-monospace, 'SFMono-Regular', 'JetBrains Mono', Menlo, Consolas, monospace;
   --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+:root[data-theme="light"] {
+  --bg: #edf1f7;
+  --panel: #ffffff;
+  --card: #ffffff;
+  --stage-bg: #f6f8fc;
+  --canvas-bg: #ffffff;
+  --border: rgba(22, 42, 74, 0.14);
+  --border-hi: rgba(2, 119, 189, 0.55);
+  --btn-bg: rgba(15, 34, 66, 0.04);
+  --btn-hover: rgba(15, 34, 66, 0.09);
+  --btn-active-bg: rgba(2, 119, 189, 0.13);
+  --btn-active-text: #06426d;
+  --cell-bg: #f5f7fb;
+  --text: #152238;
+  --text-strong: #0c1626;
+  --text-label: #2c3e59;
+  --dim: #52647f;
+  --accent: #0277bd;
+  --warm: #c65d00;
+  --danger: #c62842;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -26,6 +57,7 @@ html, body {
   font-size: 12.5px;
   -webkit-font-smoothing: antialiased;
   user-select: none;
+  transition: background 0.18s ease, color 0.18s ease;
 }
 
 .hidden { display: none !important; }
@@ -61,11 +93,11 @@ html, body {
   height: 24px;
   border-radius: 6px;
   background: linear-gradient(155deg, #9c7248 0%, #9c7248 28%, #36688a 28%, #36688a 62%, #22d8f8 62%, #ff8224 100%);
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  border: 1px solid var(--border);
 }
 
 .brand-text { display: flex; flex-direction: column; line-height: 1.15; }
-.brand-title { font-weight: 700; letter-spacing: 0.18em; font-size: 13px; color: #fff; }
+.brand-title { font-weight: 700; letter-spacing: 0.18em; font-size: 13px; color: var(--text-strong); }
 .brand-sub { font-size: 10px; color: var(--dim); }
 
 .scenario-strip {
@@ -84,7 +116,7 @@ html, body {
 .pill, .action-btn, .tool-pill, .mode-btn, .mini-btn {
   appearance: none;
   border: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--btn-bg);
   color: var(--dim);
   font-family: var(--sans);
   font-size: 11px;
@@ -96,14 +128,14 @@ html, body {
 }
 
 .pill:hover, .action-btn:hover, .tool-pill:hover, .mode-btn:hover, .mini-btn:hover {
-  background: rgba(255, 255, 255, 0.09);
-  color: #fff;
-  border-color: rgba(165, 200, 250, 0.35);
+  background: var(--btn-hover);
+  color: var(--text-strong);
+  border-color: var(--border-hi);
 }
 
 .pill.active, .tool-pill.active, .mode-btn.active, .mini-btn.active, .action-btn.active {
-  background: rgba(56, 214, 255, 0.16);
-  color: #ebfbff;
+  background: var(--btn-active-bg);
+  color: var(--btn-active-text);
   border-color: var(--border-hi);
 }
 
@@ -113,9 +145,15 @@ html, body {
   color: #ffd5a8;
 }
 
+:root[data-theme="light"] .action-btn.warm {
+  background: rgba(217, 108, 0, 0.10);
+  border-color: rgba(198, 93, 0, 0.42);
+  color: #9e4700;
+}
+
 .action-btn.warm:hover {
   background: rgba(255, 156, 59, 0.25);
-  color: #fff;
+  color: var(--text-strong);
 }
 
 .action-btn.danger {
@@ -124,9 +162,15 @@ html, body {
   color: #ffb2bd;
 }
 
+:root[data-theme="light"] .action-btn.danger {
+  background: rgba(198, 40, 66, 0.09);
+  border-color: rgba(198, 40, 66, 0.40);
+  color: #a61c33;
+}
+
 .action-btn.danger:hover {
   background: rgba(255, 84, 108, 0.28);
-  color: #fff;
+  color: var(--text-strong);
 }
 
 /* 3-Column Workbench */
@@ -148,7 +192,7 @@ html, body {
 }
 
 .sidebar::-webkit-scrollbar { width: 5px; }
-.sidebar::-webkit-scrollbar-thumb { background: rgba(145, 180, 235, 0.22); border-radius: 3px; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 
 .card {
   background: var(--card);
@@ -172,7 +216,7 @@ html, body {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: #bcd0ee;
+  color: var(--text-label);
 }
 
 .mat-badge {
@@ -180,8 +224,8 @@ html, body {
   font-size: 9.5px;
   padding: 2px 6px;
   border-radius: 4px;
-  background: rgba(56, 214, 255, 0.14);
-  color: #82e8ff;
+  background: var(--btn-active-bg);
+  color: var(--accent);
 }
 
 .tool-grid, .field-grid {
@@ -214,7 +258,7 @@ html, body {
   display: flex;
   justify-content: space-between;
   font-size: 11px;
-  color: #c8d7ef;
+  color: var(--text-label);
 }
 
 .mono-accent {
@@ -249,7 +293,7 @@ input[type="range"] {
   border: 1px solid var(--border);
   border-radius: 9px;
   font-size: 11.5px;
-  color: #c9d9f0;
+  color: var(--text-label);
 }
 
 .export-btns {
@@ -261,7 +305,7 @@ input[type="range"] {
 .canvas-stage {
   flex: 1;
   min-height: 0;
-  background: #060911;
+  background: var(--stage-bg);
   border: 1px solid var(--border);
   border-radius: 10px;
   overflow: hidden;
@@ -294,7 +338,7 @@ input[type="range"] {
 }
 
 .stat-group strong {
-  color: #eaf2ff;
+  color: var(--text-strong);
   font-weight: 600;
 }
 
@@ -303,8 +347,8 @@ input[type="range"] {
   width: 100%;
   display: block;
   border-radius: 7px;
-  border: 1px solid rgba(135, 175, 230, 0.16);
-  background: #070b14;
+  border: 1px solid var(--border);
+  background: var(--canvas-bg);
 }
 
 #mohr-canvas { height: 176px; }
@@ -317,8 +361,8 @@ input[type="range"] {
 }
 
 .metric-cell {
-  background: rgba(255, 255, 255, 0.025);
-  border: 1px solid rgba(145, 180, 235, 0.1);
+  background: var(--cell-bg);
+  border: 1px solid var(--border);
   border-radius: 6px;
   padding: 5px 7px;
   display: flex;
@@ -327,7 +371,7 @@ input[type="range"] {
 }
 
 .mk { font-size: 9.5px; color: var(--dim); }
-.mv { font-family: var(--mono); font-size: 11px; font-variant-numeric: tabular-nums; color: #f0f6ff; }
+.mv { font-family: var(--mono); font-size: 11px; font-variant-numeric: tabular-nums; color: var(--text-strong); }
 
 .method-note {
   font-size: 10px;
