@@ -25,7 +25,7 @@
     const hud = new EngineeringHud(mohrCanvas, chartCanvas);
 
     const uiState = {
-      theme: 'dark',
+      theme: 'light',
       paused: false,
       fieldId: 0,
       tool: 'probe', // 'probe' | 'excavate' | 'pour_sand' | 'pour_clay' | 'footing'
@@ -320,7 +320,7 @@
       }
     }
 
-    applyTheme('dark');
+    applyTheme('light');
     syncScenarioUi('quickclay');
 
     let lastMs = performance.now();
