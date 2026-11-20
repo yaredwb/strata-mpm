@@ -1,6 +1,6 @@
 # STRATA — Finite-Strain Elastoplastic MLS-MPM Computational Geomechanics Laboratory
 
-> **Live Interactive Browser Lab:** https://yaredwb.github.io/strata-mpm/
+> **Live Interactive Browser Lab:** https://yaredwb.com/strata-mpm/
 
 A zero-dependency, real-time **Moving Least Squares Material Point Method (MLS-MPM + APIC)** computational geomechanics laboratory in the browser, paired with a double-precision **C++20/OpenMP reference solver** and quantitative geotechnical verification suite.
 
@@ -24,7 +24,7 @@ A 30fps H.264 simulation video of the retrogressive quick-clay cascade is includ
 
 ## Quick Start
 
-- **Online (GitHub Pages):** https://yaredwb.github.io/strata-mpm/
+- **Online (GitHub Pages):** https://yaredwb.com/strata-mpm/
 - **Direct local open:** open `index.html` in any modern browser (zero build step, zero external dependencies).
 - **Hardened local server (`127.0.0.1` only):**
   ```bash
